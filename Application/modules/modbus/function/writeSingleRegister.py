@@ -39,12 +39,22 @@ class Module:
 				for RegisterAddr in range(2, 256):
 					for i in range(int(self.options['Threads'][0])):
 						if (len(ips) > 0):
-							# print type(ips.pop(0))
-							if RegisterValue == 255:
-								thread = threading.Thread(target=self.do,args=(ips.pop(0), str(RegisterAddr), str(RegisterValue)))
-							thread = threading.Thread(target=self.do, args=(str(ip), str(RegisterAddr), str(RegisterValue)))
-							thread.start()
-							THREADS.append(thread)
+							if RegisterAddr in [4,5,6,7,8,9,10]:
+								# print type(ips.pop(0))
+								if RegisterValue == 255:
+									thread = threading.Thread(target=self.do,args=(ips.pop(0), str(RegisterAddr), str(1234)))
+								thread = threading.Thread(target=self.do, args=(str(ip), str(RegisterAddr), str(1234)))
+								thread.start()
+								THREADS.append(thread)
+							else:
+								# print type(ips.pop(0))
+								if RegisterValue == 255:
+									thread = threading.Thread(target=self.do,
+															  args=(ips.pop(0), str(RegisterAddr), str(RegisterValue)))
+								thread = threading.Thread(target=self.do,
+														  args=(str(ip), str(RegisterAddr), str(RegisterValue)))
+								thread.start()
+								THREADS.append(thread)
 						else:
 							break
 					for thread in THREADS:

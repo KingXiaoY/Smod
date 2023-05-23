@@ -68,7 +68,7 @@ class Module:
 		self.printLine('[+] Looking for supported function codes on ' + ip,bcolors.OKGREEN)
 		for i in range(0, 256): # Total of 127 (legal) function codes
 			time.sleep(1)
-			if i == 1 or 2 or 3:
+			if i in [1,2,3]:
 				ans = c.sr1(ModbusADU(transId=getTransId(), unitId=int(self.options['UID'][0]))/ModbusPDU_Read_Generic_getfunc_origin(funcCode=i),timeout=timeout, verbose=0)
 			else:
 				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0])) / ModbusPDU_Read_Generic_getfunc(funcCode=i),timeout=timeout, verbose=0)

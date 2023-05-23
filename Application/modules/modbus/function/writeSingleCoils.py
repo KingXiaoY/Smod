@@ -39,12 +39,22 @@ class Module:
 				for OutputValue in [2232]:
 					for i in range(int(self.options['Threads'][0])):
 						if (len(ips) > 0):
-							# print type(ips.pop(0))
-							if OutputAddr == 65535:
-								thread = threading.Thread(target=self.do,args=(ips.pop(0), str(OutputAddr), str(OutputValue)))
-							thread = threading.Thread(target=self.do, args=(str(ip), str(OutputAddr), str(OutputValue)))
-							thread.start()
-							THREADS.append(thread)
+							if OutputAddr in [1,2,3,4,5,6,7,8,9,10,11,12,13]:
+								# print type(ips.pop(0))
+								if OutputAddr == 65535:
+									thread = threading.Thread(target=self.do,args=(ips.pop(0), str(OutputAddr), str(1234)))
+								thread = threading.Thread(target=self.do, args=(str(ip), str(OutputAddr), str(1234)))
+								thread.start()
+								THREADS.append(thread)
+							else:
+								# print type(ips.pop(0))
+								if OutputAddr == 65535:
+									thread = threading.Thread(target=self.do,
+															  args=(ips.pop(0), str(OutputAddr), str(OutputValue)))
+								thread = threading.Thread(target=self.do,
+														  args=(str(ip), str(OutputAddr), str(OutputValue)))
+								thread.start()
+								THREADS.append(thread)
 						else:
 							break
 					for thread in THREADS:

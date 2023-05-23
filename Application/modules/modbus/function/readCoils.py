@@ -40,11 +40,18 @@ class Module:
 					for i in range(int(self.options['Threads'][0])):
 						if(len(ips) > 0):
 								# print type(ips.pop(0))
-								if Quantity == 255:
-									thread = threading.Thread(target=self.do, args=(ips.pop(0),str(StartAddr),str(Quantity)))
-								thread = threading.Thread(target=self.do, args=(str(ip),str(StartAddr),str(Quantity)))
-								thread.start()
-								THREADS.append(thread)
+								if StartAddr in [3,4,5,6,7,8,9]:
+									if Quantity == 255:
+										thread = threading.Thread(target=self.do_copy(), args=(ips.pop(0),str(StartAddr),str(Quantity)))
+									thread = threading.Thread(target=self.do_copy(), args=(str(ip),str(StartAddr),str(Quantity)))
+									thread.start()
+									THREADS.append(thread)
+								else:
+									if Quantity == 255:
+										thread = threading.Thread(target=self.do(), args=(ips.pop(0),str(StartAddr),str(Quantity)))
+									thread = threading.Thread(target=self.do(), args=(str(ip),str(StartAddr),str(Quantity)))
+									thread.start()
+									THREADS.append(thread)
 						else:
 							break
 					for thread in THREADS:
@@ -70,6 +77,17 @@ class Module:
 			return None
 		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
 		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils(startAddr=int(StartAddr,16),quantity=int(Quantity,16)),timeout=timeout, verbose=0)
+		ans = ModbusADU_Answer(str(ans))
+		self.printLine('[+] Response is :',bcolors.OKGREEN)
+		ans.show()
+		time.sleep(3)
+	def do_copy(self,ip, StartAddr, Quantity):
+		c = connectToTarget(ip,self.options['RPORT'][0])
+		if(c == None):
+			self.printLine('[-] Modbus is not running on : ' + ip,bcolors.WARNING)
+			return None
+		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
+		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils_origin(startAddr=int(StartAddr,16),quantity=int(Quantity,16)),timeout=timeout, verbose=0)
 		ans = ModbusADU_Answer(str(ans))
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
