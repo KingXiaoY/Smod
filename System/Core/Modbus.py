@@ -96,6 +96,12 @@ class ModbusPDU_Read_Generic_getfunc(Packet):
 	fields_desc = [ XByteField("funcCode", 0x01),
 			XShortField("startAddr", 0x0000),
 			XShortField("quantity", 0x2203)]
+
+class ModbusPDU_Read_Generic_getfunc_origin(Packet):
+	name = "Read Generic"
+	fields_desc = [ XByteField("funcCode", 0x01),
+			XShortField("startAddr", 0x0000),
+			XShortField("quantity", 0x0000)]
 # 0x01 - Read Coils
 class ModbusPDU01_Read_Coils_galilRIO(Packet):
 	name = "Read Coils Request"

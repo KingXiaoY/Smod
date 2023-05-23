@@ -75,7 +75,7 @@ class Module:
 					closeConnectionToTarget(c)
 					pass
 
-			for i in range(1,5):
+			for i in range(195,200):
 				c = connectToTarget(ip,self.options['RPORT'][0])
 				if(c == None):
 					break
