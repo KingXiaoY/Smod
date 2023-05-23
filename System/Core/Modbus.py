@@ -85,6 +85,11 @@ class ModbusPDU_Read_Generic_uid(Packet):
 	fields_desc = [ XByteField("funcCode", 0x01),
 			XShortField("startAddr", 0x0000),
 			XShortField("quantity", 0x2201)]
+class ModbusPDU_Read_Generic_uid_origin(Packet):
+	name = "Read Generic"
+	fields_desc = [ XByteField("funcCode", 0x01),
+			XShortField("startAddr", 0x0000),
+			XShortField("quantity", 0x0000)]
 
 class ModbusPDU_Read_Generic_getfunc(Packet):
 	name = "Read Generic"
