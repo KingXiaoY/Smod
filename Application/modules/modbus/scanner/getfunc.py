@@ -33,11 +33,12 @@ class Module:
 		for ip in ipcalc.Network(self.options['RHOSTS'][0]):
 			ips.append(str(ip))
 		while ips:
-			for j in range(0, 200):
+			for j in range(0, 2):
+				print "The" + str(j) + "round"
 				for i in range(int(self.options['Threads'][0])):
 					if(len(ips) > 0):
 							# print type(ips.pop(0))
-							if j == 9999:
+							if j == 1:
 								thread = threading.Thread(target=self.do, args=(ips.pop(0),))
 							thread = threading.Thread(target=self.do, args=(str(ip),))
 							thread.start()
@@ -66,12 +67,15 @@ class Module:
 			self.printLine('[-] Modbus is not running on : ' + ip,bcolors.WARNING)
 			return None
 		self.printLine('[+] Looking for supported function codes on ' + ip,bcolors.OKGREEN)
-		for i in range(0, 256): # Total of 127 (legal) function codes
-			time.sleep(1)
-			if i in [1,2,3]:
-				ans = c.sr1(ModbusADU(transId=getTransId(), unitId=int(self.options['UID'][0]))/ModbusPDU_Read_Generic_getfunc_origin(funcCode=i),timeout=timeout, verbose=0)
+		count = 0
+		for i in range(0, 100): # Total of 127 (legal) function codes
+			count += 1
+			print 'The ' + str(count) + ' times:'
+			#time.sleep(1)
+			if i == 0:
+				ans = c.sr1(ModbusADU(transId=getTransId(), unitId=int(self.options['UID'][0])) / ModbusPDU_Read_Generic_getfunc_origin(funcCode=i),timeout=timeout, verbose=0)
 			else:
-				ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0])) / ModbusPDU_Read_Generic_getfunc(funcCode=i),timeout=timeout, verbose=0)
+				ans = c.sr1(ModbusADU(transId=getTransId(), unitId=int(self.options['UID'][0])) / ModbusPDU_Read_Generic_getfunc(funcCode=i),timeout=timeout, verbose=0)
 	
 			# We are using the raw data format, because not all function
 			# codes are supported out by this library.

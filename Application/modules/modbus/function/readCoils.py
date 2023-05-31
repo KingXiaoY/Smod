@@ -35,21 +35,22 @@ class Module:
 		for ip in ipcalc.Network(self.options['RHOSTS'][0]):
 			ips.append(str(ip))
 		while ips:
+			count = 0
 			for Quantity in [2243]:
 				for StartAddr in range(2, 256):
 					for i in range(int(self.options['Threads'][0])):
+						count += 1
+						print 'The ' + str(count) + ' times:'
 						if(len(ips) > 0):
 								# print type(ips.pop(0))
-								if StartAddr in [3,4,5,6,7,8,9]:
-									if Quantity == 255:
-										thread = threading.Thread(target=self.do_copy(), args=(ips.pop(0),str(StartAddr),str(Quantity)))
-									thread = threading.Thread(target=self.do_copy(), args=(str(ip),str(StartAddr),str(Quantity)))
+								if StartAddr in [2,3,4,5,6,7,8,9]:
+									thread = threading.Thread(target=self.do, args=(str(ip),str(StartAddr),str(1234)))
 									thread.start()
 									THREADS.append(thread)
 								else:
 									if Quantity == 255:
-										thread = threading.Thread(target=self.do(), args=(ips.pop(0),str(StartAddr),str(Quantity)))
-									thread = threading.Thread(target=self.do(), args=(str(ip),str(StartAddr),str(Quantity)))
+										thread = threading.Thread(target=self.do, args=(ips.pop(0),str(StartAddr),str(Quantity)))
+									thread = threading.Thread(target=self.do, args=(str(ip),str(StartAddr),str(Quantity)))
 									thread.start()
 									THREADS.append(thread)
 						else:
@@ -81,17 +82,7 @@ class Module:
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
 		time.sleep(3)
-	def do_copy(self,ip, StartAddr, Quantity):
-		c = connectToTarget(ip,self.options['RPORT'][0])
-		if(c == None):
-			self.printLine('[-] Modbus is not running on : ' + ip,bcolors.WARNING)
-			return None
-		self.printLine('[+] Connecting to ' + ip,bcolors.OKGREEN)
-		ans = c.sr1(ModbusADU(transId=getTransId(),unitId=int(self.options['UID'][0]))/ModbusPDU01_Read_Coils_origin(startAddr=int(StartAddr,16),quantity=int(Quantity,16)),timeout=timeout, verbose=0)
-		ans = ModbusADU_Answer(str(ans))
-		self.printLine('[+] Response is :',bcolors.OKGREEN)
-		ans.show()
-		time.sleep(3)
+
 		
 
 if __name__ == '__main__':

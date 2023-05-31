@@ -33,7 +33,7 @@ class Module:
 		for ip in ipcalc.Network(self.options['RHOSTS'][0]):
 			ips.append(str(ip))
 		while ips:
-			for j in range(0, 2):#1000
+			for j in range(0, 1):#1000
 				for i in range(int(self.options['Threads'][0])):
 					if(len(ips) > 0):
 							# print type(ips.pop(0))
@@ -62,12 +62,11 @@ class Module:
 	def do(self,ip):
 		self.printLine('[+] Start Brute Force UID on : ' + ip,bcolors.OKGREEN)
 		for j in range(0,100):
-			for i in range(1,194): # Total of 255 (legal) uid
+			for i in range(1,196): # Total of 255 (legal) uid
 				c = connectToTarget(ip,self.options['RPORT'][0])
 				if(c == None):
 					break
 				try:
-
 					c.sr1(ModbusADU(transId=getTransId(),unitId=i)/ModbusPDU_Read_Generic_uid(funcCode=1),timeout=timeout, verbose=0)
 					self.printLine('[+] UID on ' + ip + ' is : ' + str(i),bcolors.OKGREEN)
 					closeConnectionToTarget(c)
@@ -75,7 +74,7 @@ class Module:
 					closeConnectionToTarget(c)
 					pass
 
-			for i in range(194,200):
+			for i in range(196,202):
 				c = connectToTarget(ip,self.options['RPORT'][0])
 				if(c == None):
 					break
@@ -87,7 +86,7 @@ class Module:
 				except Exception,e:
 					closeConnectionToTarget(c)
 					pass
-			time.sleep(10)
+			time.sleep(20)
 
 
 if __name__ == '__main__':

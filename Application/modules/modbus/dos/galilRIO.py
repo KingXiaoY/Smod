@@ -32,18 +32,20 @@ class Module:
 		moduleName 	= self.info['Name']
 		print bcolors.OKBLUE + '[+]' + bcolors.ENDC + ' Module ' + moduleName + ' Start'
 		count = 0
-		for i in range(int(self.options['Threads'][0])):
-			if(self.options['RHOST'][0]):
-				thread 	= threading.Thread(target=self.do,args=(self.options['RHOST'][0],))
-				if count % 20 == 0:
-					thread = threading.Thread(target=self.do_copy(), args=(self.options['RHOST'][0],))
+		for j in range(0,10):
+			for i in range(int(self.options['Threads'][0])):
+				if(self.options['RHOST'][0]):
+					#thread 	= threading.Thread(target=self.do,args=(self.options['RHOST'][0],))
+					if count % 27 == 0:
+						thread = threading.Thread(target=self.do_copy, args=(self.options['RHOST'][0],))
+					else:
+						thread = threading.Thread(target=self.do, args=(self.options['RHOST'][0],))
+					count += 1
+					print 'The ' + str(count) + ' times:'
+					thread.start()
+					THREADS.append(thread)
 				else:
-					thread = threading.Thread(target=self.do, args=(self.options['RHOST'][0],))
-				count += 1
-				thread.start()
-				THREADS.append(thread)
-			else:
-				break
+					break
 		for thread in THREADS:
 			thread.join()
 		if(down):
@@ -63,7 +65,6 @@ class Module:
 
 	def do(self,ip):
 		time.sleep(60)
-
 		global down
 		count = 0
 		if (down == True):
@@ -83,7 +84,7 @@ class Module:
 				break
 
 	def do_copy(self,ip):
-		time.sleep(60)
+		#time.sleep(60)
 
 		global down
 		count = 0

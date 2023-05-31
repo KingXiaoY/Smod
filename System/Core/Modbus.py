@@ -121,12 +121,7 @@ class ModbusPDU01_Read_Coils(Packet):
 			# 0x0000 to 0xFFFF
 			XShortField("startAddr", 0x0000),
 			XShortField("quantity", 0x2243)]
-class ModbusPDU01_Read_Coils_origin(Packet):
-	name = "Read Coils Request"
-	fields_desc = [ XByteField("funcCode", 0x01),
-			# 0x0000 to 0xFFFF
-			XShortField("startAddr", 0x0000),
-			XShortField("quantity", 0x0000)]
+
 class ModbusPDU01_Read_Coils_Answer(Packet):
 	name = "Read Coils Answer"
 	fields_desc = [ XByteField("funcCode", 0x01),
@@ -159,11 +154,7 @@ class ModbusPDU03_Read_Holding_Registers(Packet):
 	fields_desc = [ XByteField("funcCode", 0x03),
 			XShortField("startAddr", 0x0001),
 			XShortField("quantity", 0x2242)]
-class ModbusPDU03_Read_Holding_Registers_origin(Packet):
-	name = "Read Holding Registers"
-	fields_desc = [ XByteField("funcCode", 0x03),
-			XShortField("startAddr", 0x0001),
-			XShortField("quantity", 0x0000)]
+
 class ModbusPDU03_Read_Holding_Registers_Answer(Packet):
 	name = "Read Holding Registers Answer"
 	fields_desc = [ XByteField("funcCode", 0x03),
