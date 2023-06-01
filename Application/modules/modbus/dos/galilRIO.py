@@ -1,6 +1,7 @@
 import os
 import threading
 import random
+import time
 
 from System.Core.Global import *
 from System.Core.Colors import *
@@ -32,8 +33,11 @@ class Module:
 		moduleName 	= self.info['Name']
 		print bcolors.OKBLUE + '[+]' + bcolors.ENDC + ' Module ' + moduleName + ' Start'
 		count = 0
-		for j in range(0,10):
+		for j in range(0,2):
+			#time.sleep(2)
+			print 'The ' + str(j) + ' rounds:'
 			for i in range(int(self.options['Threads'][0])):
+				#time.sleep(2)
 				if(self.options['RHOST'][0]):
 					#thread 	= threading.Thread(target=self.do,args=(self.options['RHOST'][0],))
 					if count % 27 == 0:
@@ -47,6 +51,7 @@ class Module:
 				else:
 					break
 		for thread in THREADS:
+			print 'The ' + str(thread) + ' thread in:'
 			thread.join()
 		if(down):
 			self.printLine('[-] Modbus is not running on : ' + self.options['RHOST'][0],bcolors.WARNING)
@@ -64,14 +69,14 @@ class Module:
 			print str
 
 	def do(self,ip):
-		time.sleep(60)
+		#time.sleep(60)
 		global down
 		count = 0
 		if (down == True):
 			return None
 		while True:
-			time.sleep(10)
-			if count==200:
+			#time.sleep(10)
+			if count==5:
 				break
 			c = connectToTarget(ip,self.options['RPORT'][0])
 			if(c == None):
@@ -91,8 +96,8 @@ class Module:
 		if (down == True):
 			return None
 		while True:
-			time.sleep(10)
-			if count==200:
+			#time.sleep(10)
+			if count==5:
 				break
 			c = connectToTarget(ip,self.options['RPORT'][0])
 			if(c == None):
